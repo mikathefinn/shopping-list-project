@@ -4,6 +4,8 @@ const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
 const clearBtn = document.getElementById('clear');
 const itemFilter = document.getElementById('filter');
+const addButton = itemForm.querySelector('button');
+let isEditMode = false;
 
 const displayItems = () => {
   const itemsFromStorage = getItemsFromStorage();
@@ -92,7 +94,24 @@ const onClickItem = (e) => {
   if (e.target.parentElement.classList.contains('remove-item')) {
     removeItem(e.target.parentElement.parentElement);
     //target parent element's parent, the li and pass it to removeItem
+  } else {
+    console.log(1);
+    setItemToEdit(e.target);
   }
+};
+
+const setItemToEdit = (itemToEdit) => {
+  isEditMode = true;
+
+  itemList.querySelectorAll('li').forEach((i) => i.classList.remove('item-edit'));
+// remove the item-edit style from all li elements (before adding styles to the selected one)
+
+  itemToEdit.classList.add('item-edit');
+  addButton.classList.add('button-edit');
+  addButton.innerHTML = '<i class="fa-solid fa-pen"></i> Edit item';
+  // add styles to button and li
+  itemInput.value = itemToEdit.textContent;
+  //change the input text of the form to the one being edited
 };
 
 const removeItem = (item) => {
