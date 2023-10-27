@@ -33,8 +33,13 @@ const onAddItemSubmit = (e) => {
     //remove class item-edit
     itemToEdit.remove();
     isEditMode = false;
+  } else {
+    //if not in edit mode, check if item is already on the list
+    if (checkIfItemExists(newItem)) {
+      alert(`${newItem} is already on the list!`);
+      return;
+    }
   }
-  //
   addItemToDOM(newItem);
   //create item DOM element
 
@@ -109,6 +114,20 @@ const onClickItem = (e) => {
   } else {
     console.log(1);
     setItemToEdit(e.target);
+  }
+};
+const checkIfItemExists = (item) => {
+  const itemsFromStorage = getItemsFromStorage();
+  //returns an array
+  if (
+    itemsFromStorage.some(
+      (storedItem) => storedItem.toLowerCase() === item.toLowerCase()
+    )
+  ) {
+    //check if the stored items match 'item' if yes - return true
+    return true;
+  } else {
+    return false;
   }
 };
 
