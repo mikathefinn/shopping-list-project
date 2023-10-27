@@ -33,7 +33,6 @@ const addItemToDOM = (item) => {
   // Create a list item
   const li = document.createElement('li');
   li.appendChild(document.createTextNode(item));
-  console.log(li);
 
   const button = createButton('remove-item btn-link text-red');
   //calls createButton func, passes classes to it, which in turn calls createIcon
@@ -83,32 +82,51 @@ const getItemsFromStorage = () => {
     //if there is something in local storage, pull it out and parse it into objects
     //that are placed in itemsFromStorage array
   }
-  return itemsFromStorage
+  return itemsFromStorage;
 };
 
-const removeItem = (e) => {
+const onClickItem = (e) => {
   //only fire off when clicking something that has a parent that's got a class
   //'remove-item'
   //in html you can see that the icon has a parent with 'remove-item' class ie. the button
   if (e.target.parentElement.classList.contains('remove-item')) {
-    console.log('click');
-    if (
-      confirm(
-        `Are you sure you want to remove ${e.target.parentElement.parentElement.textContent} form the list?`
-      )
-    ) {
-      e.target.parentElement.parentElement.remove();
-    }
-    //target parent element's parent, the li
+    removeItem(e.target.parentElement.parentElement);
+    //target parent element's parent, the li and pass it to removeItem
+  }
+};
+
+const removeItem = (item) => {
+  if (
+    confirm(
+      `Are you sure you want to remove ${item.textContent} form the list?`
+    )
+  ) {
+    item.remove();
+    // remove item from DOM
+
+    removeItemFromStorage(item.textContent);
   }
   checkUI();
 };
+const removeItemFromStorage = (itemToRemove) => {
+  let itemsFromStorage = getItemsFromStorage();
+  //returns an array
+  console.log(itemsFromStorage);
 
+  //Filter out item to be removed from the array
+  itemsFromStorage = itemsFromStorage.filter((i) => i !== itemToRemove);
+
+  // update to local storage
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+};
 const clearItems = (e) => {
   while (itemList.firstChild) {
     //as long as itemList.firstChild is true, remove firstChild
     itemList.firstChild.remove();
   }
+
+  //Clear from local storage
+  localStorage.removeItem('items');
   checkUI();
 };
 
@@ -145,7 +163,7 @@ const checkUI = () => {
 // Event listeners
 
 itemForm.addEventListener('submit', onAddItemSubmit);
-itemList.addEventListener('click', removeItem);
+itemList.addEventListener('click', onClickItem);
 clearBtn.addEventListener('click', clearItems);
 itemFilter.addEventListener('input', filterItems);
 
