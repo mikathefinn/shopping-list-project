@@ -23,6 +23,18 @@ const onAddItemSubmit = (e) => {
     alert('You silly cunt, please add an item.');
     return;
   }
+
+  if (isEditMode) {
+    const itemToEdit = itemList.querySelector('.item-edit');
+    console.log(itemToEdit.textContent);
+    removeItemFromStorage(itemToEdit.textContent);
+    //remove from storage
+    itemToEdit.classList.remove('item-edit');
+    //remove class item-edit
+    itemToEdit.remove();
+    isEditMode = false;
+  }
+  //
   addItemToDOM(newItem);
   //create item DOM element
 
@@ -103,8 +115,10 @@ const onClickItem = (e) => {
 const setItemToEdit = (itemToEdit) => {
   isEditMode = true;
 
-  itemList.querySelectorAll('li').forEach((i) => i.classList.remove('item-edit'));
-// remove the item-edit style from all li elements (before adding styles to the selected one)
+  itemList
+    .querySelectorAll('li')
+    .forEach((i) => i.classList.remove('item-edit'));
+  // remove the item-edit style from all li elements (before adding styles to the selected one)
 
   itemToEdit.classList.add('item-edit');
   addButton.classList.add('button-edit');
@@ -177,6 +191,9 @@ const checkUI = () => {
     clearBtn.style.display = 'block';
     itemFilter.style.display = 'block';
   }
+  addButton.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+  addButton.classList.remove('button-edit');
+  isEditMode = false;
 };
 
 // Event listeners

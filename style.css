@@ -124,8 +124,12 @@ header h1 {
 }
 .button-edit {
   color: #333;
-  background-color: rgb(22, 185, 0);
+  background-color:  rgb(22, 185, 0);
   box-shadow: 3px 3px 3px #ccc;
+}
+.button-edit:hover {
+  background-color: rgb(18, 153, 0);
+  
 }
 @media (max-width: 500px) {
   .items li {
